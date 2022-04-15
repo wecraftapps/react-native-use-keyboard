@@ -1,18 +1,25 @@
+/* eslint-disable react-native/no-inline-styles */
 import * as React from 'react';
+import { StyleSheet, View, Text, TextInput } from 'react-native';
 
-import { StyleSheet, View, Text } from 'react-native';
-import { multiply } from 'react-native-use-keyboard';
+import { useKeyboardHeight } from 'react-native-use-keyboard';
 
 export default function App() {
-  const [result, setResult] = React.useState<number | undefined>();
-
-  React.useEffect(() => {
-    multiply(3, 7).then(setResult);
-  }, []);
+  const [keyboardHeigth] = useKeyboardHeight();
 
   return (
     <View style={styles.container}>
-      <Text>Result: {result}</Text>
+      <Text>Height: {keyboardHeigth}</Text>
+
+      <TextInput
+        placeholder="Username"
+        style={{
+          height: 40,
+          borderColor: '#000000',
+          borderBottomWidth: 1,
+          marginBottom: 36,
+        }}
+      />
     </View>
   );
 }

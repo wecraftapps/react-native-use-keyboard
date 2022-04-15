@@ -1,22 +1,68 @@
-import { NativeModules, Platform } from 'react-native';
+import { useEffect, useState } from 'react';
+import {
+  Keyboard,
+  Platform,
+  NativeModules,
+  PixelRatio,
+  DeviceEventEmitter,
+} from 'react-native';
 
-const LINKING_ERROR =
-  `The package 'react-native-use-keyboard' doesn't seem to be linked. Make sure: \n\n` +
-  Platform.select({ ios: "- You have run 'pod install'\n", default: '' }) +
-  '- You rebuilt the app after installing the package\n' +
-  '- You are not using Expo managed workflow\n';
+const ratio = PixelRatio.get();
+const isAndroid = Platform.OS === 'android';
+const UseKeyboard = NativeModules.UseKeyboard;
 
-const UseKeyboard = NativeModules.UseKeyboard
-  ? NativeModules.UseKeyboard
-  : new Proxy(
-      {},
-      {
-        get() {
-          throw new Error(LINKING_ERROR);
-        },
-      }
-    );
+if (isAndroid) {
+  UseKeyboard.initialize();
+}
 
 export function multiply(a: number, b: number): Promise<number> {
   return UseKeyboard.multiply(a, b);
 }
+
+export const useKeyboardHeight = (
+  didShow?: () => void,
+  didHide?: () => void
+): [number] => {
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
+
+  useEffect(() => {
+    if (isAndroid)
+      DeviceEventEmitter.addListener(
+        'androidKeyboardHeight',
+        onKeyboardDidShow
+      );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const onKeyboardDidShow = (e: any): void => {
+    const tmpKeyboardHeight = isAndroid
+      ? e?.keyboardHeight / ratio
+      : e?.endCoordinates?.height;
+
+    setKeyboardHeight(tmpKeyboardHeight);
+
+    if (didShow) didShow();
+  };
+
+  const onKeyboardDidHide = (): void => {
+    setKeyboardHeight(0);
+
+    if (didHide) didHide();
+  };
+
+  useEffect(() => {
+    Keyboard.addListener('keyboardDidShow', onKeyboardDidShow);
+    Keyboard.addListener('keyboardDidHide', onKeyboardDidHide);
+    return (): void => {
+      Keyboard.removeListener('keyboardDidShow', onKeyboardDidShow);
+      Keyboard.removeListener('keyboardDidHide', onKeyboardDidHide);
+      DeviceEventEmitter.removeListener(
+        'androidKeyboardHeight',
+        onKeyboardDidShow
+      );
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return [keyboardHeight];
+};
