@@ -1,7 +1,7 @@
 {
   "name": "react-native-use-keyboard",
   "version": "0.1.0",
-  "description": "Package to get keyboard events",
+  "description": "React Native package to get keyboard events",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
   "types": "lib/typescript/index.d.ts",

@@ -15,10 +15,6 @@ if (isAndroid) {
   UseKeyboard.initialize();
 }
 
-export function multiply(a: number, b: number): Promise<number> {
-  return UseKeyboard.multiply(a, b);
-}
-
 export const useKeyboardHeight = (
   didShow?: () => void,
   didHide?: () => void
