@@ -11,16 +11,12 @@ npm install react-native-use-keyboard
 ## Usage
 
 ```js
-import { multiply } from "react-native-use-keyboard";
+import { useKeyboardHeight } from 'react-native-use-keyboard';
 
-// ...
+...
 
-const result = await multiply(3, 7);
+const [keyboardHeigth] = useKeyboardHeight(); // keyboardHeigth is the height of the keyboard
 ```
-
-## Contributing
-
-See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
 
 ## License
 
