@@ -49,10 +49,11 @@ public class UseKeyboardModule extends ReactContextBaseJavaModule {
         public void run() {
           new KeyboardHeightProvider(getReactApplicationContext(), activity.getWindowManager(), activity.getWindow().getDecorView(), new KeyboardHeightProvider.KeyboardHeightListener() {
             @Override
-            public void onKeyboardHeightChanged(int keyboardHeight, boolean keyboardOpen, boolean isLandscape) {
+            public void onKeyboardHeightChanged(int height, boolean open) {
                 WritableMap params = Arguments.createMap();
-                params.putInt("keyboardHeight", keyboardHeight);
-                sendEvent("androidKeyboardHeight", params);
+                params.putInt("height", height);
+                params.putBoolean("isOpen", open);
+                sendEvent("androidKeyboard", params);
             }
           });
         }

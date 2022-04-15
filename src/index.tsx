@@ -6,6 +6,7 @@ import {
   PixelRatio,
   DeviceEventEmitter,
 } from 'react-native';
+import type KeyboardState from './interfaces/keyboard-state.interface';
 
 const ratio = PixelRatio.get();
 const isAndroid = Platform.OS === 'android';
@@ -15,33 +16,38 @@ if (isAndroid) {
   UseKeyboard.initialize();
 }
 
-export const useKeyboardHeight = (
+const CLOSED_STATE = {
+  height: 0,
+  isOpen: false,
+};
+
+export const useKeyboard = (
   didShow?: () => void,
   didHide?: () => void
-): [number] => {
-  const [keyboardHeight, setKeyboardHeight] = useState(0);
+): [KeyboardState] => {
+  const [keyboardData, setKeyboardData] = useState(CLOSED_STATE);
 
   useEffect(() => {
     if (isAndroid)
-      DeviceEventEmitter.addListener(
-        'androidKeyboardHeight',
-        onKeyboardDidShow
-      );
+      DeviceEventEmitter.addListener('androidKeyboard', onKeyboardDidShow);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onKeyboardDidShow = (e: any): void => {
     const tmpKeyboardHeight = isAndroid
-      ? e?.keyboardHeight / ratio
+      ? e?.height / ratio
       : e?.endCoordinates?.height;
 
-    setKeyboardHeight(tmpKeyboardHeight);
+    setKeyboardData({
+      height: tmpKeyboardHeight,
+      isOpen: isAndroid ? e?.isOpen : true,
+    });
 
     if (didShow) didShow();
   };
 
   const onKeyboardDidHide = (): void => {
-    setKeyboardHeight(0);
+    setKeyboardData(CLOSED_STATE);
 
     if (didHide) didHide();
   };
@@ -52,13 +58,10 @@ export const useKeyboardHeight = (
     return (): void => {
       Keyboard.removeListener('keyboardDidShow', onKeyboardDidShow);
       Keyboard.removeListener('keyboardDidHide', onKeyboardDidHide);
-      DeviceEventEmitter.removeListener(
-        'androidKeyboardHeight',
-        onKeyboardDidShow
-      );
+      DeviceEventEmitter.removeListener('androidKeyboard', onKeyboardDidShow);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return [keyboardHeight];
+  return [keyboardData];
 };

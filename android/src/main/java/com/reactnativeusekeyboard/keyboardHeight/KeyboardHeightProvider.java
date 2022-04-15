@@ -32,10 +32,9 @@ public class KeyboardHeightProvider extends PopupWindow {
             if (keyboardHeight < 100) {
                 keyboardHeight = 0;
             }
-            boolean isLandscape = metrics.widthPixels > metrics.heightPixels;
             boolean keyboardOpen = keyboardHeight > 0;
             if (listener != null) {
-                listener.onKeyboardHeightChanged(keyboardHeight, keyboardOpen, isLandscape);
+                listener.onKeyboardHeightChanged(keyboardHeight, keyboardOpen);
             }
         });
 
@@ -51,6 +50,6 @@ public class KeyboardHeightProvider extends PopupWindow {
     }
 
     public interface KeyboardHeightListener {
-        void onKeyboardHeightChanged(int keyboardHeight, boolean keyboardOpen, boolean isLandscape);
+        void onKeyboardHeightChanged(int keyboardHeight, boolean keyboardOpen);
     }
 }
