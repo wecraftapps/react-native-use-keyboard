@@ -5,17 +5,23 @@ Package to get keyboard events
 ## Installation
 
 ```sh
-npm install react-native-use-keyboard
+npm i @wecraftapps/react-native-use-keyboard
 ```
+
+## Showcase
+
+![react-native-use-keyboard](https://media.giphy.com/media/cVvP68IC8dCo9NrSV2/giphy.gif)
+
+[example component for basic usage](https://github.com/wecraftapps/react-native-use-keyboard/blob/master/src/examples/basic-usage.tsx)
 
 ## Usage
 
 ```js
-import { useKeyboardHeight } from 'react-native-use-keyboard';
+import { useKeyboard } from '@wecraftapps/react-native-use-keyboard';
 
 ...
 
-const [keyboardHeigth] = useKeyboardHeight(); // keyboardHeigth is the height of the keyboard
+const [keyboard] = useKeyboard();
 ```
 
 ## License
