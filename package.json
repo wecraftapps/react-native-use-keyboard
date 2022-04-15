@@ -1,6 +1,6 @@
 {
   "name": "@wecraftapps/react-native-use-keyboard",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "React Native package to get keyboard events",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
