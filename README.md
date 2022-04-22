@@ -64,7 +64,3 @@ import { useKeyboard } from '@wecraftapps/react-native-use-keyboard';
 
 const [keyboard] = useKeyboard();
 ```
-
-## License
-
-MIT

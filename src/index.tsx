@@ -21,16 +21,12 @@ const CLOSED_STATE = {
   isOpen: false,
 };
 
-export const useKeyboard = (
-  didShow?: () => void,
-  didHide?: () => void
-): [KeyboardState] => {
+export const useKeyboard = (): [KeyboardState] => {
   const [keyboardData, setKeyboardData] = useState(CLOSED_STATE);
 
   useEffect(() => {
     if (isAndroid)
       DeviceEventEmitter.addListener('androidKeyboard', onKeyboardDidShow);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onKeyboardDidShow = (e: any): void => {
@@ -42,14 +38,10 @@ export const useKeyboard = (
       height: tmpKeyboardHeight,
       isOpen: isAndroid ? e?.isOpen : true,
     });
-
-    if (didShow) didShow();
   };
 
   const onKeyboardDidHide = (): void => {
     setKeyboardData(CLOSED_STATE);
-
-    if (didHide) didHide();
   };
 
   useEffect(() => {
@@ -60,7 +52,6 @@ export const useKeyboard = (
       Keyboard.removeListener('keyboardDidHide', onKeyboardDidHide);
       DeviceEventEmitter.removeListener('androidKeyboard', onKeyboardDidShow);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return [keyboardData];
